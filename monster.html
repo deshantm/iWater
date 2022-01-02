@@ -61,6 +61,15 @@
 			const cube3 = new THREE.Mesh(geometry, material3);
 			scene.add( cube3 );
 			cube3.position.setY(-1);
+			
+			const plane_geometry = new THREE.PlaneGeometry( 1, 1 );
+			var heart_crystal_texture = THREE.ImageUtils.loadTexture("images/heart_crystal_two_right.jpeg");
+			//const material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+			//const heart_crystal_material = new THREE.MeshBasicMaterial({color:0xFFFFFF, map: heart_crystal_texture, side: THREE.DoubleSide});
+			const heart_crystal_material = new THREE.MeshBasicMaterial({color:0xFFFFFF, map: heart_crystal_texture});
+			const heart_crystal_plane = new THREE.Mesh( plane_geometry, heart_crystal_material );
+			scene.add( heart_crystal_plane );
+			heart_crystal_plane.position.setX(2);	
 
 			function get_superpower() {
 				if(has_superpower == 1) {
@@ -203,6 +212,7 @@
 				cube.rotation.y += y_change;
 				cube2.rotation.y += y_change;
 				cube3.rotation.y += y_change;
+				//heart_crystal_plane.rotation.y += y_change/2;
 				if(pos >= 0) {
 					if(pos == 5) {
 						superpower_cube_left.rotation.y += y_change;
