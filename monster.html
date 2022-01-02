@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+  		<h1>Hello</h1>
+		<button onclick=change(0);>Stop</button>
+		<button onclick=change(0.05);>Start</button>
+		<button onclick=start_audio();>Roar</button>
+		<button onclick=stop_audio();>Stop Roar</button>
+		<button onclick=get_superpower();>Get Superpower</button>
+		<span id="super"> What superpower will you get?</span>	
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="js/three.js"></script>
+		<script>
+			var pos = -1;
+			var has_superpower = 0;
+			var superpower_cube;
+			var superpower_cube_left;
+			var superpower_cube_right;
+  			var context = new AudioContext();
+			var super_powers = [ 'Super Strength', 'Super Speed', 'Super Whirlwind', 'Ice Breath', 'Heat Paws', 'Flying', 'Super Tools'];
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+			const geometry = new THREE.BoxGeometry();
+
+			//const img = new Image();
+			//img.crossOrigin = "anonymous";
+			//img.src = "images/cmonster.jpeg";
+			//img.width = 224;
+			//img.height = 224;
+
+			//var texture = THREE.ImageUtils.loadTexture("images/cmonster.jpeg");
+			var texture = THREE.ImageUtils.loadTexture("images/phead.jpeg");
+			var texture2 = THREE.ImageUtils.loadTexture("images/pmiddle.jpeg");
+			var texture3 = THREE.ImageUtils.loadTexture("images/pbottom.jpeg");
+			//const material = new THREE.MeshBasicMaterial({color:0xFFFFFF, map: texture});
+			const material = new THREE.MeshBasicMaterial({color:0xFFFFFF, map: texture});
+			const material2 = new THREE.MeshBasicMaterial({color:0xFFFFFF, map: texture2});
+			const material3 = new THREE.MeshBasicMaterial({color:0xFFFFFF, map: texture3});
+			
+			
+			//const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+
+			const cube = new THREE.Mesh( geometry, material );
+			scene.add( cube );
+			cube.position.setY(1);
+			
+			
+			const cube2 = new THREE.Mesh(geometry, material2);
+			scene.add( cube2 );
+
+			const cube3 = new THREE.Mesh(geometry, material3);
+			scene.add( cube3 );
+			cube3.position.setY(-1);
+
+			function get_superpower() {
+				if(has_superpower == 1) {
+					if(pos == 5) {
+						scene.remove(superpower_cube_left);
+						scene.remove(superpower_cube_right);
+					}
+					else {
+						scene.remove(superpower_cube);
+					}
+				}
+				pos = Math.floor(Math.random()*(super_powers.length-1));	
+				document.getElementById("super").textContent=super_powers[pos];	
+				if(pos == 0) { //super strength
+					change(0);
+					var superpower_texture = THREE.ImageUtils.loadTexture("images/super_strength_left.jpeg");
+					var superpower_material = new THREE.MeshBasicMaterial({color:0xFFFFFF, map: superpower_texture});
+					superpower_cube = new THREE.Mesh(geometry, superpower_material);
+					scene.add(superpower_cube);
+					superpower_cube.position.setX(-1);	
+				}
+				else if(pos == 1) {//super speed
+					change(0);
+					var superpower_texture = THREE.ImageUtils.loadTexture("images/super_speed_right.jpeg");
+					var superpower_material = new THREE.MeshBasicMaterial({color:0xFFFFFF, map: superpower_texture});
+					superpower_cube = new THREE.Mesh(geometry, superpower_material);
+					scene.add(superpower_cube);
+					superpower_cube.position.setX(1);	
+				}
+				else if(pos == 2) {//super whirlwind
+					change(0);
+					var superpower_texture = THREE.ImageUtils.loadTexture("images/super_whirlwind_bottom.jpeg");
+					var superpower_material = new THREE.MeshBasicMaterial({color:0xFFFFFF, map: superpower_texture});
+					superpower_cube = new THREE.Mesh(geometry, superpower_material);
+					scene.add(superpower_cube);
+					superpower_cube.position.setY(-2);
+				}
+				else if(pos == 3) {//ice breath
+					change(0);
+					var superpower_texture = THREE.ImageUtils.loadTexture("images/ice_breath_right.jpeg");
+					var superpower_material = new THREE.MeshBasicMaterial({color:0xFFFFFF, map: superpower_texture});
+                                        superpower_cube = new THREE.Mesh(geometry, superpower_material);
+                                        scene.add(superpower_cube);
+                                        superpower_cube.position.setX(1);
+                                        superpower_cube.position.setY(1);
+				}
+				else if(pos == 4) {//heat paws
+					change(0);
+					var superpower_texture = THREE.ImageUtils.loadTexture("images/heat_paws.jpeg");
+                                        var superpower_material = new THREE.MeshBasicMaterial({color:0xFFFFFF, map: superpower_texture});
+                                        superpower_cube = new THREE.Mesh(geometry, superpower_material);
+                                        scene.add(superpower_cube);
+                                        superpower_cube.position.setY(-2);
+				}
+				else if(pos == 5) {//flying (two wings)
+					change(0);
+					var superpower_texture_left = THREE.ImageUtils.loadTexture("images/wing_left.jpeg");
+                                        var superpower_material_left = new THREE.MeshBasicMaterial({color:0xFFFFFF, map: superpower_texture_left});
+                                        superpower_cube_left = new THREE.Mesh(geometry, superpower_material_left);
+                                        scene.add(superpower_cube_left);
+                                        superpower_cube_left.position.setX(-1);
+					
+					var superpower_texture_right = THREE.ImageUtils.loadTexture("images/wing_right.jpeg");
+                                        var superpower_material_right = new THREE.MeshBasicMaterial({color:0xFFFFFF, map: superpower_texture_right});
+                                        superpower_cube_right = new THREE.Mesh(geometry, superpower_material_right);
+                                        scene.add(superpower_cube_right);
+                                        superpower_cube_right.position.setX(1);
+				}
+				else if(pos == 6) {//super tools
+					var superpower_texture = THREE.ImageUtils.loadTexture("images/super_tools.jpeg");
+                                        var superpower_material = new THREE.MeshBasicMaterial({color:0xFFFFFF, map: superpower_texture});
+                                        superpower_cube = new THREE.Mesh(geometry, superpower_material);
+                                        scene.add(superpower_cube);
+                                        superpower_cube.position.setY(2);
+				}
+				has_superpower = 1;
+
+			}
+
+			function start_audio() {
+				context.resume().then(() => {
+    				console.log('Playback resumed successfully');
+  				});
+				sound.stop();
+				sound.play();
+			}
+			
+			function stop_audio() {
+				sound.stop();
+			}
+
+			
+			var listener = new THREE.AudioListener();
+			camera.add( listener );
+
+			// create a global audio source
+			var sound = new THREE.Audio( listener );
+
+			var audioLoader = new THREE.AudioLoader();
+
+			//Load a sound and set it as the Audio object's buffer
+			audioLoader.load( 'sounds/mixkit-monsters-scream-1958.wav', function( buffer ) {
+    				sound.setBuffer( buffer );
+    				sound.setLoop(true);
+    				//sound.setVolume(0.5);
+    				sound.play();
+				},
+            				// onProgress callback
+            				function ( xhr ) {
+                			console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+            				},
+
+            				// onError callback
+            				function ( err ) {
+                			console.log( 'Un error ha ocurrido' );
+            				}
+
+			);
+			camera.position.z = 5;
+			var y_change = 0.05;	
+			function change(new_y) {
+				y_change = new_y;			
+			}	
+			function animate() {
+				requestAnimationFrame( animate );
+
+				//cube.rotation.x += 0.01;
+				cube.rotation.y += y_change;
+				cube2.rotation.y += y_change;
+				cube3.rotation.y += y_change;
+				if(pos >= 0) {
+					if(pos == 5) {
+						superpower_cube_left.rotation.y += y_change;
+						superpower_cube_right.rotation.y += y_change;
+					}
+					else {
+						superpower_cube.rotation.y += y_change;
+					}
+				}
+				renderer.render( scene, camera );
+			};
+
+			animate();
+
+		</script>
+	</body>
+</html>
