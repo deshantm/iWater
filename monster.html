@@ -195,11 +195,14 @@
     				console.log('Playback resumed successfully');
   				});
 				sound.stop();
+				game_song_sound.stop();
 				sound.play();
+				game_song_sound.play();
 			}
 			
 			function stop_audio() {
 				sound.stop();
+				//game_song_sound.stop();
 			}
 
 			
@@ -208,9 +211,15 @@
 
 			// create a global audio source
 			var sound = new THREE.Audio( listener );
-
+			var game_song_sound = new THREE.Audio( listener );
 			var audioLoader = new THREE.AudioLoader();
-
+			var game_song_audioLoader = new THREE.AudioLoader();
+			game_song_audioLoader.load( 'sounds/the_game_song.m4a', function ( buffer ) {
+				game_song_sound.setBuffer( buffer );
+				game_song_sound.setLoop(true);
+				game_song_sound.play();
+				}
+			);
 			//Load a sound and set it as the Audio object's buffer
 			audioLoader.load( 'sounds/mixkit-monsters-scream-1958.wav', function( buffer ) {
     				sound.setBuffer( buffer );
