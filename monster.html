@@ -77,6 +77,16 @@
 			scene.add( heart_crystal_plane );
 			heart_crystal_plane.position.setX(2);	
 
+			
+			const buildings_geometry = new THREE.PlaneGeometry( 3,3,3, 1);
+			var buildings_texture = THREE.ImageUtils.loadTexture("images/buildings.jpeg");
+			const buildings_material = new THREE.MeshBasicMaterial({color:0xFFFFFF, map: buildings_texture});
+			const buildings_plane = new THREE.Mesh(buildings_geometry, buildings_material);
+			scene.add( buildings_plane );
+			buildings_plane.position.setZ(-1);
+			buildings_plane.position.setX(-1);
+			buildings_plane.position.setY(3);
+	
 			function get_superpower() {
 				if(has_superpower == 1) {
 					if(pos == 5) {
@@ -252,7 +262,7 @@
 				cube3.rotation.y += y_change;
 				stop_sign_cube.rotation.y += y_change;
 
-				//heart_crystal_plane.rotation.y += y_change/2;
+				heart_crystal_plane.rotation.y += y_change/2;
 				if(pos >= 0) {
 					if(pos == 5) {
 						superpower_cube_left.rotation.y += y_change;
