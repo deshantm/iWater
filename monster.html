@@ -199,6 +199,23 @@
 				has_superpower = 1;
 
 			}
+			
+			
+			var xSpeed = 0.1;
+			var ySpeed = 0.1;	
+			document.addEventListener('keydown', function(event) {
+    				//var keyCode = event.which;
+				console.log(keyCode);
+    				if (keyCode == 38) { //up
+        				superpower_cube.position.y += ySpeed;
+    				} else if (keyCode == 40) { //down
+        				superpower_cube.position.y -= ySpeed;
+    				} else if (keyCode == 37) { //left
+        				superpower_cube.position.x -= xSpeed;
+    				} else if (keyCode == 39) { //right
+        				superpower_cube.position.x += xSpeed;
+    				}
+			});
 
 			function start_audio() {
 				context.resume().then(() => {
