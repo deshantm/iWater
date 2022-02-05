@@ -2,21 +2,25 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>My first three.js app</title>
-  		<h1>Hello</h1>
-		<button onclick=change(0);><img src="images/stop_sign.jpeg" width="200" height="200"/></button>
-		<button onclick=change(0.05);>Start</button>
-		<button onclick=start_audio();>Roar</button>
-		<button onclick=stop_audio();>Stop Roar</button>
-		<button onclick=get_superpower();><img src="images/heart_crystal_two_right.jpeg" width="200" height="200"/></button>
-		<span id="super"> What superpower will you get?</span>	
+		<title>iWater</title>
 		<style>
 			body { margin: 0; }
 		</style>
 	</head>
+	<script>
+		//var canvas = createCanvas(100, 100);
+ 
+  		//canvas.parent('game');
+	</script>
 	<body>
+ 	<table>
+	<tr><td>
+		<canvas  id="gameCanvas">
+		</canvas>
+
 		<script src="js/three.js"></script>
 		<script>
+			var jump = 0;
 			var pos = -1;
 			var has_superpower = 0;
 			var superpower_cube;
@@ -27,7 +31,7 @@
 			const scene = new THREE.Scene();
 			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-			const renderer = new THREE.WebGLRenderer();
+			const renderer = new THREE.WebGLRenderer({canvas:gameCanvas});
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( renderer.domElement );
 			const geometry = new THREE.BoxGeometry();
@@ -202,21 +206,41 @@
 			
 			
 			var xSpeed = 0.1;
-			var ySpeed = 0.1;	
+			var zSpeed = 0.1;	
+			var yJump = 1;
 			document.addEventListener('keydown', function(event) {
-    				//var keyCode = event.which;
-				console.log(keyCode);
+    				var keyCode = event.which;
+				//console.log(keyCode);
+				if (keyCode == 65) { //'a'
+			          cube.position.y += yJump; 
+			          cube2.position.y += yJump; 
+			          cube3.position.y += yJump; 
+				  jump = 1;
+				}	
     				if (keyCode == 38) { //up
-        				superpower_cube.position.y += ySpeed;
+        				cube.position.z -= zSpeed;
+        				cube2.position.z -= zSpeed;
+        				cube3.position.z -= zSpeed;
     				} else if (keyCode == 40) { //down
-        				superpower_cube.position.y -= ySpeed;
+        				cube.position.z += zSpeed;
+        				cube2.position.z += zSpeed;
+        				cube3.position.z += zSpeed;
     				} else if (keyCode == 37) { //left
-        				superpower_cube.position.x -= xSpeed;
+        				cube.position.x -= xSpeed;
+        				cube2.position.x -= xSpeed;
+        				cube3.position.x -= xSpeed;
     				} else if (keyCode == 39) { //right
-        				superpower_cube.position.x += xSpeed;
+        				cube.position.x += xSpeed;
+        				cube2.position.x += xSpeed;
+        				cube3.position.x += xSpeed;
     				}
 			});
-
+			
+			function copy_power() {
+				sound.stop();
+				game_song_sound.stop();
+				copy_power_sound.play();
+			}
 			function start_audio() {
 				context.resume().then(() => {
     				console.log('Playback resumed successfully');
@@ -229,6 +253,7 @@
 			
 			function stop_audio() {
 				sound.stop();
+				copy_power_sound.stop();
 				//game_song_sound.stop();
 			}
 
@@ -239,8 +264,18 @@
 			// create a global audio source
 			var sound = new THREE.Audio( listener );
 			var game_song_sound = new THREE.Audio( listener );
+			var copy_power_sound = new THREE.Audio( listener );
 			var audioLoader = new THREE.AudioLoader();
 			var game_song_audioLoader = new THREE.AudioLoader();
+			var copy_power_audioLoader = new THREE.AudioLoader();
+
+			copy_power_audioLoader.load('sounds/copy_power.m4a', function ( buffer ) {
+				copy_power_sound.setBuffer( buffer );
+				copy_power_sound.setLoop(false);
+				copy_power_sound.play();
+				}
+			);
+
 			game_song_audioLoader.load( 'sounds/the_game_song.m4a', function ( buffer ) {
 				game_song_sound.setBuffer( buffer );
 				game_song_sound.setLoop(true);
@@ -289,11 +324,31 @@
 						superpower_cube.rotation.y += y_change;
 					}
 				}
+				if(jump == 1) {
+					cube.position.y -= yJump;
+					jump = 0;
+				}
 				renderer.render( scene, camera );
 			};
+			</script>
 
+			<script>
 			animate();
+			</script>
+			<div id="game">
+    			</div>
+			</td></tr>
+			<tr><td>
 
-		</script>
+  		<h1>Hello</h1>
+		<button onclick=change(0);><img src="images/stop_sign.jpeg" width="200" height="200"/></button>
+		<button onclick=change(0.05);>Start</button>
+		<button onclick=start_audio();>Roar</button>
+		<button onclick=stop_audio();>Stop Roar</button>
+		<button onclick=get_superpower();><img src="images/heart_crystal_two_right.jpeg" width="200" height="200"/></button>
+		<button onclick=copy_power();>Copy Power</button>
+		<span id="super"> What superpower will you get?</span>	
+		</td></tr>
+		</table>
 	</body>
 </html>
